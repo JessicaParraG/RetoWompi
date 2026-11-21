@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    alias(libs.plugins.serenity)
+}
+
+group = 'co.wompi.automation'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // Screenplay + REST (capa de framework en src/main)
+    implementation libs.serenity.core
+    implementation libs.serenity.screenplay
+    implementation libs.serenity.screenplay.rest
+    implementation libs.serenity.rest.assured
+    implementation libs.dotenv.java
+    implementation libs.jackson.databind
+    implementation libs.awaitility
+
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    // BDD: Cucumber sobre JUnit Platform (capa de pruebas en src/test)
+    testImplementation libs.serenity.cucumber
+    testImplementation libs.cucumber.junit.platform.engine
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.platform.suite
+    testRuntimeOnly libs.junit.platform.launcher
+    testRuntimeOnly libs.slf4j.simple
+
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+    // Propaga propiedades -D a la JVM de pruebas:
+    //  - cucumber.*  → p.ej. -Dcucumber.filter.tags="@smoke"
+    //  - java.net.*  → p.ej. -Djava.net.preferIPv6Addresses=true si la red no llega a Wompi por IPv4
+    systemProperties System.getProperties().findAll {
+        def key = it.key.toString()
+        key.startsWith('cucumber.') || key.startsWith('java.net.')
+    }
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showStandardStreams = false
+    }
+    // Las pruebas golpean un API externo: nunca reutilizar resultados cacheados
+    outputs.upToDateWhen { false }
+    // Genera el reporte Serenity siempre, incluso si hay escenarios fallidos
+    finalizedBy 'aggregate'
+}

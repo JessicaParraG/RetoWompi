@@ -1,0 +1,30 @@
+[versions]
+serenity = "5.4.2"
+# Versiones alineadas con las que declara serenity-bdd 5.4.2 para evitar conflictos de dependencias
+cucumber = "8.0.4"
+junit-platform = "6.1.3"
+dotenv = "3.2.0"
+lombok = "1.18.48"
+slf4j = "2.0.17"
+# Alineadas con las versiones que trae serenity-rest-assured 5.4.2
+jackson = "2.21.7"
+awaitility = "4.3.0"
+
+[libraries]
+serenity-core = { module = "net.serenity-bdd:serenity-core", version.ref = "serenity" }
+serenity-screenplay = { module = "net.serenity-bdd:serenity-screenplay", version.ref = "serenity" }
+serenity-screenplay-rest = { module = "net.serenity-bdd:serenity-screenplay-rest", version.ref = "serenity" }
+serenity-rest-assured = { module = "net.serenity-bdd:serenity-rest-assured", version.ref = "serenity" }
+serenity-cucumber = { module = "net.serenity-bdd:serenity-cucumber", version.ref = "serenity" }
+cucumber-junit-platform-engine = { module = "io.cucumber:cucumber-junit-platform-engine", version.ref = "cucumber" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-platform" }
+junit-platform-suite = { module = "org.junit.platform:junit-platform-suite" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+dotenv-java = { module = "io.github.cdimascio:dotenv-java", version.ref = "dotenv" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+[plugins]
+serenity = { id = "net.serenity-bdd.serenity-gradle-plugin", version.ref = "serenity" }
